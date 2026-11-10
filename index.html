@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#183c2b">
+    <meta name="description" content="Carnet de ferme simple pour suivre les parcelles, les interventions et les intrants.">
+    <title>Terra — Carnet de ferme</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="Terra, accueil" data-i18n-aria="brandHome">
+        <span class="brand-mark" aria-hidden="true">T</span>
+        <span>terra<span class="brand-dot">.</span></span>
+      </a>
+      <div class="farm-switcher">
+        <span class="farm-icon" aria-hidden="true">⌂</span>
+        <span><strong>La Ferme des Prés</strong><small data-i18n="farmType">Exploitation agricole</small></span>
+        <span class="switch-chevron" aria-hidden="true">⌄</span>
+      </div>
+      <p class="nav-label" data-i18n="farmSpace">ESPACE FERME</p>
+      <nav class="navigation" aria-label="Navigation principale" data-i18n-aria="mainNavigation">
+        <a class="nav-link active" href="#overview" data-view="overview"><span>▦</span> <span data-i18n="overview">Vue d’ensemble</span></a>
+        <a class="nav-link" href="#parcels" data-view="parcels"><span>▧</span> <span data-i18n="myParcels">Mes parcelles</span></a>
+        <a class="nav-link" href="#activities" data-view="activities"><span>↗</span> <span data-i18n="activities">Interventions</span></a>
+        <a class="nav-link" href="#reports" data-view="reports"><span>▤</span> <span data-i18n="reports">Registre & rapports</span></a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="season-card">
+          <span class="season-icon" aria-hidden="true">✳</span>
+          <div><strong data-i18n="seasonLabel">Campagne 2026</strong><small data-i18n="localData">Vos données restent sur cet appareil.</small></div>
+        </div>
+        <div class="profile">
+          <span class="avatar">JM</span>
+          <span><strong>Jean Martin</strong><small data-i18n="farmer">Agriculteur</small></span>
+          <button class="more-button" aria-label="Plus d’options" data-i18n-aria="moreOptions">···</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="mobile-menu" id="menuToggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="sidebar" data-i18n-aria="openMenu">☰</button>
+        <div class="breadcrumb"><span data-i18n="myFarm">Mon exploitation</span> <span>/</span> <strong id="breadcrumbCurrent">Vue d’ensemble</strong></div>
+        <div class="topbar-right">
+          <label class="language-picker"><span class="language-globe" aria-hidden="true">◎</span><span class="visually-hidden" data-i18n="chooseLanguage">Choisir la langue</span><select id="languageSelect" aria-label="Choisir la langue" data-i18n-aria="chooseLanguage"></select></label>
+          <span class="sync-status"><span class="status-dot"></span> <span data-i18n="savedLocally">Enregistré sur cet appareil</span></span>
+          <button class="icon-button" id="helpButton" aria-label="Aide" data-i18n-aria="help">?</button>
+        </div>
+      </header>
+
+      <section class="page active-page" id="overview">
+        <div class="welcome-row">
+          <div>
+            <p class="eyebrow"><span class="sun-icon">☀</span> <span id="todayLabel"></span></p>
+            <h1><span data-i18n="hello">Bonjour</span> Jean <span class="wave">✳</span></h1>
+            <p class="intro" data-i18n="overviewIntro">Voici ce qui se passe sur votre exploitation.</p>
+          </div>
+          <button class="button button-primary" id="addActivityTop"><span aria-hidden="true">＋</span> <span data-i18n="addActivity">Ajouter une intervention</span></button>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-icon green">▧</div>
+            <div class="stat-label" data-i18n="trackedArea">Surface suivie</div>
+            <div class="stat-value"><span id="areaStat">0</span><small> ha</small></div>
+            <div class="stat-foot"><span class="tiny-dot"></span> <span id="plotStat">0 parcelle</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon yellow">✳</div>
+            <div class="stat-label" data-i18n="seasonActivities">Interventions cette saison</div>
+            <div class="stat-value" id="activityStat">0</div>
+            <div class="stat-foot"><span class="tiny-dot yellow-dot"></span> <span data-i18n="loggedInJournal">Enregistrées dans le carnet</span></div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon blue">◌</div>
+            <div class="stat-label" data-i18n="nitrogenUsed">Azote utilisé</div>
+            <div class="stat-value"><span id="nitrogenStat">0</span><small> kg</small></div>
+            <div class="stat-foot" data-i18n="onTrackedParcels">Sur les parcelles enregistrées</div>
+          </article>
+          <article class="stat-card">
+            <div class="stat-icon peach">✓</div>
+            <div class="stat-label" data-i18n="campaignProgress">Dossier de la campagne</div>
+            <div class="stat-value"><span id="completionStat">0</span><small>%</small></div>
+            <div class="progress-track"><span id="completionBar"></span></div>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel activity-panel">
+            <div class="panel-heading">
+              <div><h2 data-i18n="latestActivities">Dernières interventions</h2><p data-i18n="recentTracking">Le suivi récent de vos parcelles</p></div>
+              <a class="text-link" href="#activities" data-view="activities"><span data-i18n="seeAll">Tout voir</span> <span>→</span></a>
+            </div>
+            <div id="recentActivities" class="recent-list"></div>
+          </section>
+          <section class="panel parcels-panel">
+            <div class="panel-heading">
+              <div><h2 data-i18n="yourParcels">Vos parcelles</h2><p id="parcelCount">0 parcelles</p></div>
+              <a class="text-link" href="#parcels" data-view="parcels"><span data-i18n="manage">Gérer</span> <span>→</span></a>
+            </div>
+            <div id="parcelPreview" class="parcel-preview"></div>
+            <button class="button button-soft full-width" id="addParcelFromHome"><span>＋</span> <span data-i18n="addParcel">Ajouter une parcelle</span></button>
+          </section>
+        </div>
+
+        <section class="tip-banner">
+          <div class="tip-badge">✳</div>
+          <div><strong data-i18n="tipTitle">Un carnet à jour, sans prise de tête.</strong><p data-i18n="tipBody">Notez vos interventions au fil de la saison. Vos données sont sauvegardées dans ce navigateur.</p></div>
+          <button class="tip-close" id="tipClose" aria-label="Fermer" data-i18n-aria="close">×</button>
+        </section>
+        <footer class="footer-note" data-i18n="footerNote">Un outil de suivi pratique — vérifiez les exigences officielles auprès de votre conseiller agricole.</footer>
+      </section>
+
+      <section class="page" id="parcels">
+        <div class="page-title-row">
+          <div><p class="eyebrow" data-i18n="yourFarm">VOTRE EXPLOITATION</p><h1 data-i18n="myParcels">Mes parcelles</h1><p class="intro" data-i18n="parcelsIntro">Retrouvez les surfaces et les cultures de votre ferme.</p></div>
+          <button class="button button-primary" id="addParcelButton"><span>＋</span> <span data-i18n="addParcel">Ajouter une parcelle</span></button>
+        </div>
+        <section class="panel table-panel">
+          <div class="panel-heading"><div><h2 data-i18n="savedParcels">Parcelles enregistrées</h2><p data-i18n="enteredByYou">Informations saisies par vos soins</p></div><span class="count-pill" id="parcelsCountPill">0</span></div>
+          <div class="table-wrap">
+            <table><thead><tr><th data-i18n="parcel">PARCELLE</th><th data-i18n="crop">CULTURE</th><th data-i18n="area">SURFACE</th><th data-i18n="activities">INTERVENTIONS</th><th></th></tr></thead><tbody id="parcelsTable"></tbody></table>
+          </div>
+          <div class="empty-state" id="parcelsEmpty" hidden><span>▧</span><strong data-i18n="noParcels">Aucune parcelle pour le moment</strong><p data-i18n="addFirstParcel">Ajoutez votre première parcelle pour commencer le suivi.</p></div>
+        </section>
+      </section>
+
+      <section class="page" id="activities">
+        <div class="page-title-row">
+          <div><p class="eyebrow" data-i18n="farmJournal">CARNET DE FERME</p><h1 data-i18n="activities">Interventions</h1><p class="intro" data-i18n="activitiesIntro">Gardez une trace des travaux et des intrants utilisés.</p></div>
+          <button class="button button-primary" id="addActivityButton"><span>＋</span> <span data-i18n="addActivity">Ajouter une intervention</span></button>
+        </div>
+        <section class="panel table-panel">
+          <div class="panel-heading"><div><h2 data-i18n="history">Historique</h2><p data-i18n="operationsLogged">Les opérations enregistrées sur vos parcelles</p></div><span class="count-pill" id="activitiesCountPill">0</span></div>
+          <div class="table-wrap">
+            <table><thead><tr><th data-i18n="date">DATE</th><th data-i18n="activityType">INTERVENTION</th><th data-i18n="parcel">PARCELLE</th><th data-i18n="productDose">PRODUIT / DOSE</th><th></th></tr></thead><tbody id="activitiesTable"></tbody></table>
+          </div>
+          <div class="empty-state" id="activitiesEmpty" hidden><span>↗</span><strong data-i18n="noActivities">Aucune intervention enregistrée</strong><p data-i18n="addFirstActivity">Ajoutez un travail pour démarrer votre carnet.</p></div>
+        </section>
+      </section>
+
+      <section class="page" id="reports">
+        <div class="page-title-row">
+          <div><p class="eyebrow" data-i18n="campaign">CAMPAGNE 2026</p><h1 data-i18n="reports">Registre & rapports</h1><p class="intro" data-i18n="reportsIntro">Consultez et exportez les données enregistrées dans votre carnet.</p></div>
+        </div>
+        <div class="report-grid">
+          <article class="panel report-card">
+            <div class="report-icon green">▤</div><h2 data-i18n="activityRegister">Registre des interventions</h2>
+            <p data-i18n="exportCsvInfo">Exportez les parcelles, travaux, produits et doses enregistrés en fichier CSV.</p>
+            <div class="report-meta"><span id="reportActivityCount">0 intervention</span><span data-i18n="updatedAutomatically">Mis à jour automatiquement</span></div>
+            <button class="button button-primary full-width" id="downloadCsv"><span data-i18n="downloadRegister">Télécharger le registre</span> <span>↓</span></button>
+          </article>
+          <article class="panel report-card">
+            <div class="report-icon yellow">▧</div><h2 data-i18n="farmSummary">Résumé de l’exploitation</h2>
+            <p data-i18n="printSummaryInfo">Préparez une vue imprimable des surfaces, cultures et interventions de la campagne.</p>
+            <div class="report-meta"><span id="reportPlotCount">0 parcelle</span><span data-i18n="workingDocument">Document de travail</span></div>
+            <button class="button button-soft full-width" id="printReport"><span data-i18n="openPrintSummary">Ouvrir le résumé imprimable</span> <span>↗</span></button>
+          </article>
+        </div>
+        <div class="notice"><span>ⓘ</span><p><strong data-i18n="important">À savoir</strong><br><span data-i18n="reportDisclaimer">Ces exports sont des outils de suivi. Ils ne constituent pas une déclaration officielle et ne garantissent pas l’éligibilité à une aide. Vérifiez le format demandé auprès de votre organisme ou conseiller.</span></p></div>
+      </section>
+    </main>
+
+    <dialog class="form-dialog" id="parcelDialog">
+      <form id="parcelForm">
+        <div class="dialog-heading"><div><p class="eyebrow" data-i18n="yourFarm">VOTRE EXPLOITATION</p><h2 data-i18n="addParcel">Ajouter une parcelle</h2></div><button type="button" class="dialog-close" data-close="parcelDialog" aria-label="Fermer" data-i18n-aria="close">×</button></div>
+        <label><span data-i18n="parcelName">Nom de la parcelle</span><input name="name" required maxlength="50" placeholder="Ex. Les Prés du Moulin" data-i18n-placeholder="parcelNameExample"></label>
+        <div class="form-row">
+          <label><span data-i18n="areaHa">Surface (ha)</span><input name="area" type="number" required min="0.01" step="0.01" placeholder="12,5"></label>
+          <label><span data-i18n="crop">Culture</span><select name="crop" required><option value="" data-i18n="choose">Choisir…</option><option value="Blé tendre" data-crop="0">Blé tendre</option><option value="Orge" data-crop="1">Orge</option><option value="Colza" data-crop="2">Colza</option><option value="Maïs" data-crop="3">Maïs</option><option value="Tournesol" data-crop="4">Tournesol</option><option value="Prairie" data-crop="5">Prairie</option><option value="Vigne" data-crop="6">Vigne</option><option value="Autre" data-i18n="other">Autre</option></select></label>
+        </div>
+        <div class="dialog-actions"><button type="button" class="button button-soft" data-close="parcelDialog" data-i18n="cancel">Annuler</button><button type="submit" class="button button-primary" data-i18n="saveParcel">Enregistrer la parcelle</button></div>
+      </form>
+    </dialog>
+
+    <dialog class="form-dialog" id="activityDialog">
+      <form id="activityForm">
+        <div class="dialog-heading"><div><p class="eyebrow" data-i18n="farmJournal">CARNET DE FERME</p><h2 data-i18n="addActivity">Ajouter une intervention</h2></div><button type="button" class="dialog-close" data-close="activityDialog" aria-label="Fermer" data-i18n-aria="close">×</button></div>
+        <div class="form-row">
+          <label><span data-i18n="date">Date</span><input name="date" type="date" required></label>
+          <label><span data-i18n="parcel">Parcelle</span><select name="parcelId" id="activityParcel" required></select></label>
+        </div>
+        <label><span data-i18n="activityType">Type d’intervention</span><select name="type" required><option value="" data-i18n="choose">Choisir…</option><option value="Fertilisation" data-activity="0">Fertilisation</option><option value="Semis" data-activity="1">Semis</option><option value="Traitement" data-activity="2">Traitement</option><option value="Irrigation" data-activity="3">Irrigation</option><option value="Récolte" data-activity="4">Récolte</option><option value="Travail du sol" data-activity="5">Travail du sol</option><option value="Autre" data-i18n="other">Autre</option></select></label>
+        <label><span data-i18n="productNote">Produit ou note</span><input name="product" maxlength="80" placeholder="Ex. Engrais azoté, variété…" data-i18n-placeholder="productExample"></label>
+        <div class="form-row">
+          <label><span data-i18n="doseQuantity">Dose / quantité</span><input name="dose" type="number" min="0" step="0.1" placeholder="Optionnel" data-i18n-placeholder="optional"></label>
+          <label><span data-i18n="unit">Unité</span><select name="unit"><option value="" data-i18n="noUnit">Sans unité</option><option>kg/ha</option><option>L/ha</option><option>t/ha</option><option>mm</option></select></label>
+        </div>
+        <p class="field-hint" data-i18n="nitrogenHint">Pour une fertilisation, indiquez la quantité d’azote en kg/ha afin de l’inclure au résumé.</p>
+        <div class="dialog-actions"><button type="button" class="button button-soft" data-close="activityDialog" data-i18n="cancel">Annuler</button><button type="submit" class="button button-primary" data-i18n="save">Enregistrer</button></div>
+      </form>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="i18n.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
